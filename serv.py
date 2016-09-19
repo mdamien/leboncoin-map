@@ -24,6 +24,7 @@ if not debug:
     }
 cache = Cache(app, config=config)
 
+
 @cache.memoize(1000)
 def geolocate(place):
     if place:
@@ -54,7 +55,7 @@ def fetch_items(url, page):
         pages = int(soup.find(id='last').attrs['href'].split('o=')[-1].split('&')[0])
     else:
         pages = page
-    has_next = soup.find(id='next') is not None
+    has_next = soup.find(id='next') is not None and 'href' in soup.find(id='next').attrs
 
     for item in soup.select('.list_item'):
         data = {}
@@ -86,7 +87,7 @@ def geocoder():
 
 @app.route("/items")
 def fetch():
-    items, has_next, pages = fetch_items(flask.request.args.get('url'), flask.request.args.get('page', 1))
+    items, has_next, pages = fetch_items(flask.request.args.get('url'), int(flask.request.args.get('page', '1')))
     resp = {
         'data': items,
         'has_next': has_next,
