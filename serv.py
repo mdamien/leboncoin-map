@@ -37,6 +37,7 @@ def geolocate(place):
                 }
         except GeocoderTimedOut:
             print('geocoder timeout')
+    return {}
 
 
 @cache.memoize(1000)
@@ -68,7 +69,6 @@ def fetch_items(url, page):
             place = item.select('.item_supp')[1].text
             place = ' '.join(x.strip() for x in place.strip().split(' ') if x.strip())
             data['place'] = place
-        data['coords'] = geolocate(place)
         price = item.find(class_='item_price')
         if price:
             data['price'] = price.text.replace('\xa0', ' ').strip()
@@ -77,6 +77,11 @@ def fetch_items(url, page):
         items.append(data)
 
     return items, has_next, pages
+
+
+@app.route("/locate")
+def geocoder():
+    return flask.jsonify(**geolocate(flask.request.args.get('q')))
 
 
 @app.route("/items")
