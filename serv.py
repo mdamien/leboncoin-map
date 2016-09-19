@@ -48,7 +48,12 @@ def fetch_items(url, page):
     print('fetch items', url_with_page)
 
     items = []
-    resp = requests.get(url_with_page)
+    proxies = None
+    if debug:
+        proxies = {
+            'https': '37.235.82.186:80',
+        }
+    resp = requests.get(url_with_page, proxies=proxies)
     soup = BeautifulSoup(resp.text, 'lxml')
 
     if soup.find(id='last') and 'href' in soup.find(id='last').attrs:
