@@ -12,7 +12,7 @@ if (search) {
 
     mapBtn.onclick = function (e) {
         e.preventDefault();
-        var url = 'http://localhost:5000/?url=' + encodeURIComponent(window.location.href);
+        var url = 'https://lbc-map.herokuapp.com/?url=' + encodeURIComponent(window.location.href);
         window.open(url, '_blank');
         return false;
     }

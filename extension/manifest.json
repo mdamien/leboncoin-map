@@ -8,7 +8,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.leboncoin.fr/*"],
-      "js": ["extension.js"],
+      "js": ["main.js"],
       "run_at": "document_end"
     }
   ],
