@@ -1,0 +1,16 @@
+{
+  "name": "lbc-map",
+  "version": "0.1",
+  "permissions": [
+    "https://www.leboncoin.fr/*"
+  ],
+  "offline_enabled": true,
+  "content_scripts": [
+    {
+      "matches": ["https://www.leboncoin.fr/*"],
+      "js": ["main.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "manifest_version": 2
+}
