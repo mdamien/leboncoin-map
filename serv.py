@@ -24,6 +24,7 @@ if not debug:
     }
 cache = Cache(app, config=config)
 
+MAX_PAGES = 5
 
 @cache.memoize(1000)
 def geolocate(place):
@@ -51,6 +52,7 @@ def fetch_items(url, page):
     proxies = None
     if debug:
         proxies = {
+            'http': '37.235.82.186:80',
             'https': '37.235.82.186:80',
         }
     resp = requests.get(url_with_page, proxies=proxies)
@@ -60,7 +62,8 @@ def fetch_items(url, page):
         pages = int(soup.find(id='last').attrs['href'].split('o=')[-1].split('&')[0])
     else:
         pages = page
-    has_next = soup.find(id='next') is not None and 'href' in soup.find(id='next').attrs
+    pages = min(pages, MAX_PAGES)
+    has_next = page < pages
 
     for item in soup.select('.list_item'):
         data = {}
@@ -106,14 +109,19 @@ def index():
     if flask.request.args.get('url'):
         return app.send_static_file('hello.html')
     else:
-        return """<html style='background-color: #333; color: #eee'><br/><br/><br/>a<center>
-                <h2 style='font-family:sans'>Ce site s'utilise avec l'extension 'Carte - Leboncoin'</h2>
+        return """<html style='background-color: #333; color: #eee'><br/><br/><br/><center>
+                <h2 style='font-family:sans'>Ce site s'utilise avec l'extension 'Carte - leboncoin.fr'</h2>
             </center></html>"""
 
 
 @app.route('/main.js')
 def send_js():
     return app.send_static_file('hello.js')
+
+
+@app.route('/favicon.ico')
+def send_favicon():
+    return app.send_static_file('favicon.ico')
 
 
 if __name__ == "__main__":

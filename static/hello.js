@@ -80,7 +80,7 @@ function get_page(page) {
   }).catch(err => {
     $('#msg').hide();
     $('#msg h1').html('Oops, une erreur est arrivée :(' + 
-      (err.status ? ('<br/><br/>' + err.status + ' - ' + err.statusText) : ''));
+      (err.status ? ('<br/><br/><small>' + err.status + ' - ' + err.statusText + '</small>') : ''));
     $('#msg').show();
   })
 }
