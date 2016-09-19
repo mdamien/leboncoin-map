@@ -14,13 +14,14 @@ function getQueryStrings() {
   } 
 
   return assoc; 
-} 
+}
 
 var qs = getQueryStrings();
 
 $.getJSON('/items', {url: qs['url']}).then(function(DATA) {
+    $('#msg').hide();
     L.mapbox.accessToken = 'pk.eyJ1IjoicG93ZXJzaG9wcyIsImEiOiJhYUdRR0t3In0.oTz8RJqED2YEcDRfJYNAOQ';
-    var map = L.mapbox.map('map', 'mapbox.streets', {
+    var map = L.mapbox.map('map', 'powershops.1ebg8klg', {
       maxZoom: 12,
     });
     var markers = new L.MarkerClusterGroup({
@@ -50,4 +51,8 @@ $.getJSON('/items', {url: qs['url']}).then(function(DATA) {
 
     map.addLayer(markers);
     map.fitBounds(markers.getBounds());
+}).catch(err => {
+  $('#msg h1').hide();
+  $('#msg h1').html('Oops, une erreur est arrivée :(<br/><br/>' + err.status + ' - ' + err.statusText);
+  $('#msg h1').show();
 })

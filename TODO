@@ -1,7 +1,10 @@
 -- HIGH --
 progressive load page per page (with visual loading indicator)
+publish on chrome web store
+reddit post
 
 -- LOW --
-nice style for leaflet map
+cname lbc.dam.io
 branding
-no url = crash
+fix "carte" button placement
+add sentry

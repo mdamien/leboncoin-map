@@ -37,6 +37,7 @@ def geolocate(place):
 
 @cache.memoize(1000)
 def fetch_items(url):
+    assert url.startswith('https://www.leboncoin.fr/')
     print('fetch items', url)
     all_found = []
 
@@ -69,8 +70,6 @@ def fetch_items(url):
             all_found.append(data)
         next = soup.find(id='last')
 
-        break
-
         if next:
             page += 1
         else:
@@ -87,7 +86,12 @@ def fetch():
 
 @app.route("/")
 def index():
-    return app.send_static_file('hello.html')
+    if flask.request.args.get('url'):
+        return app.send_static_file('hello.html')
+    else:
+        return """<html style='background-color: #333; color: #eee'><br/><br/><br/>a<center>
+                <h2 style='font-family:sans'>Ce site s'utilise avec l'extension 'Carte - Leboncoin'</h2>
+            </center></html>"""
 
 
 @app.route('/main.js')
