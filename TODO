@@ -1,6 +1,8 @@
 -- HIGH --
-progressive load page per page (with visual loading indicator)
 publish on chrome web store
+
+-- MED --
+better geocoding engine and batching
 reddit post
 
 -- LOW --

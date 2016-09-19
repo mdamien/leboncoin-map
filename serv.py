@@ -2,6 +2,7 @@ import requests, json, os, functools
 from bs4 import BeautifulSoup
 
 from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
 geolocator = Nominatim()
 
 if 'DYNO' in os.environ:
@@ -27,61 +28,66 @@ cache = Cache(app, config=config)
 def geolocate(place):
     if place:
         print('geolocate', place)
-        location = geolocator.geocode(place)
-        if location:
-            return {
-                'lat': location.latitude,
-                'lng': location.longitude,
-            }
+        try:
+            location = geolocator.geocode(place)
+            if location:
+                return {
+                    'lat': location.latitude,
+                    'lng': location.longitude,
+                }
+        except GeocoderTimedOut:
+            print('geocoder timeout')
 
 
 @cache.memoize(1000)
-def fetch_items(url):
+def fetch_items(url, page):
     assert url.startswith('https://www.leboncoin.fr/')
-    print('fetch items', url)
-    all_found = []
+    url_with_page = url + '&o=' + str(page)
+    print('fetch items', url_with_page)
 
-    page = 1
-    while True:
-        print(url)
-        resp = requests.get(url + '&o=' + str(page))
-        print(resp)
-        soup = BeautifulSoup(resp.text, 'lxml')
+    items = []
+    resp = requests.get(url_with_page)
+    soup = BeautifulSoup(resp.text, 'lxml')
 
-        for item in soup.select('.list_item'):
-            data = {}
-            data['link'] = item.attrs['href']
-            data['title'] = item.select('.item_title')[0].text.strip()
-            img = item.select('.item_imagePic span')
-            if img:
-                data['thumbnail'] = img[0].attrs['data-imgsrc']
-            if item.select('.item_supp'):
-                data['category'] = item.select('.item_supp')[0].text \
-                                        .replace('(pro)', '').strip()
-                place = item.select('.item_supp')[1].text
-                place = ' '.join(x.strip() for x in place.strip().split(' ') if x.strip())
-                data['place'] = place
-            data['coords'] = geolocate(place)
-            price = item.find(class_='item_price')
-            if price:
-                data['price'] = price.text.replace('\xa0', ' ').strip()
-            if item.find(class_='item_absolute'):
-                data['date'] = item.find(class_='item_absolute').text.strip()
-            all_found.append(data)
-        next = soup.find(id='last')
+    if soup.find(id='last') and 'href' in soup.find(id='last').attrs:
+        pages = int(soup.find(id='last').attrs['href'].split('o=')[-1].split('&')[0])
+    else:
+        pages = page
+    has_next = soup.find(id='next') is not None
 
-        if next:
-            page += 1
-        else:
-            break
+    for item in soup.select('.list_item'):
+        data = {}
+        data['link'] = item.attrs['href']
+        data['title'] = item.select('.item_title')[0].text.strip()
+        img = item.select('.item_imagePic span')
+        if img:
+            data['thumbnail'] = img[0].attrs['data-imgsrc']
+        if item.select('.item_supp'):
+            data['category'] = item.select('.item_supp')[0].text \
+                                    .replace('(pro)', '').strip()
+            place = item.select('.item_supp')[1].text
+            place = ' '.join(x.strip() for x in place.strip().split(' ') if x.strip())
+            data['place'] = place
+        data['coords'] = geolocate(place)
+        price = item.find(class_='item_price')
+        if price:
+            data['price'] = price.text.replace('\xa0', ' ').strip()
+        if item.find(class_='item_absolute'):
+            data['date'] = item.find(class_='item_absolute').text.strip()
+        items.append(data)
 
-    return all_found
+    return items, has_next, pages
 
 
 @app.route("/items")
 def fetch():
-    items = fetch_items(flask.request.args.get('url'))
-    return flask.jsonify(*items)
+    items, has_next, pages = fetch_items(flask.request.args.get('url'), flask.request.args.get('page', 1))
+    resp = {
+        'data': items,
+        'has_next': has_next,
+        'pages': pages,
+    }
+    return flask.jsonify(**resp)
 
 
 @app.route("/")
