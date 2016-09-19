@@ -21,10 +21,11 @@ var qs = getQueryStrings();
 $.getJSON('/items', {url: qs['url']}).then(function(DATA) {
     L.mapbox.accessToken = 'pk.eyJ1IjoicG93ZXJzaG9wcyIsImEiOiJhYUdRR0t3In0.oTz8RJqED2YEcDRfJYNAOQ';
     var map = L.mapbox.map('map', 'mapbox.streets', {
-      maxZoom: 10,
+      maxZoom: 12,
     });
     var markers = new L.MarkerClusterGroup({
       animate: false,
+      spiderfyDistanceMultiplier: 2.5,
     });
 
     DATA.forEach(function(a) {

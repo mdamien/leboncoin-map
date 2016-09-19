@@ -1,15 +1,27 @@
-import functools
-import requests, json
+import requests, json, os, functools
 from bs4 import BeautifulSoup
 
 from geopy.geocoders import Nominatim
 geolocator = Nominatim()
 
+if 'DYNO' in os.environ:
+    debug = False
+else:
+    debug = True
+
 import flask
 from flask_cache import Cache
 app = flask.Flask(__name__)
-cache = Cache(app, config={'CACHE_TYPE': 'filesystem', 'CACHE_DIR': 'cache'})
 
+config = {
+    'CACHE_TYPE': 'filesystem',
+    'CACHE_DIR': 'cache'
+}
+if not debug:
+    config = {
+        'CACHE_TYPE:': 'simple',
+    }
+cache = Cache(app, config=config)
 
 @cache.memoize(1000)
 def geolocate(place):
@@ -84,4 +96,4 @@ def send_js():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=debug)

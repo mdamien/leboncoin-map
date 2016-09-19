@@ -1,0 +1,7 @@
+flask
+beautifulsoup4
+geopy
+flask_cache
+requests
+gunicorn
+gevent

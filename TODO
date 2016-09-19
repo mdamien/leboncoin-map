@@ -1,2 +1,7 @@
+-- HIGH --
 progressive load page per page (with visual loading indicator)
-deploy heroku
+
+-- LOW --
+nice style for leaflet map
+branding
+no url = crash
