@@ -1,3 +1,4 @@
 cache/*
 !cache/.keep
 *.pyc
+/ext.zip

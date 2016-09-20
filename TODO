@@ -5,6 +5,7 @@ publish on chrome web store
 better geocoding engine and batching
 reddit post
 custom max pages (or "load more" or map pagination)
+bug with empty "place"
 
 -- LOW --
 cname lbc.dam.io
@@ -15,3 +16,6 @@ add sentry
 fast load of first items by loading the currently visible items when clicking the "see on map" button
 vendor js libs
 progressive geocoding meessage
+
+-- WISHLIST --
+realtime search
