@@ -5,10 +5,7 @@ from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 geolocator = Nominatim()
 
-if 'DYNO' in os.environ:
-    debug = False
-else:
-    debug = True
+debug = 'gunicorn' not in os.environ.get('SERVER_SOFTWARE', '')
 
 import flask
 from flask_cache import Cache
@@ -18,10 +15,6 @@ config = {
     'CACHE_TYPE': 'filesystem',
     'CACHE_DIR': 'cache'
 }
-if not debug:
-    config = {
-        'CACHE_TYPE:': 'simple',
-    }
 cache = Cache(app, config=config)
 
 MAX_PAGES = 5
@@ -49,13 +42,7 @@ def fetch_items(url, page):
     print('fetch items', url_with_page)
 
     items = []
-    proxies = None
-    if debug:
-        proxies = {
-            'http': '37.235.82.186:80',
-            'https': '37.235.82.186:80',
-        }
-    resp = requests.get(url_with_page, proxies=proxies)
+    resp = requests.get(url_with_page)
     soup = BeautifulSoup(resp.text, 'lxml')
 
     if soup.find(id='last') and 'href' in soup.find(id='last').attrs:
