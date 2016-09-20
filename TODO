@@ -1,19 +1,15 @@
--- HIGH --
-publish on chrome web store
-
 -- MED --
 better geocoding engine and batching
 reddit post
 custom max pages (or "load more" or map pagination)
 bug with empty "place"
+bug error 500 des fois
+add sentry
 
 -- LOW --
-cname lbc.dam.io
 branding
-fix "carte" button placement
-add sentry
 // pages requests
-fast load of first items by loading the currently visible items when clicking the "see on map" button
+fast load of first items by loading the currently visible items when clicking the "see on map" button / use selected filter as hint
 vendor js libs
 progressive geocoding meessage
 

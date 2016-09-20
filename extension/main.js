@@ -1,19 +1,13 @@
-var search = document.getElementById('searchbutton');
-if (search) {
-    var container = search.parentNode;
-    container.innerHTML += search.outerHTML;
+if (document.getElementById('searchbutton')) { // verify user is doing a search
+    var container = document.querySelector('.list .tabsHeader');
 
-    var mapBtn = container.lastChild;
-    mapBtn.value = 'Carte';
-    mapBtn.id = '';
-    mapBtn.style.marginTop = '10px';
-    mapBtn.style.backgroundColor = '#999';
-    delete mapBtn.attributes['data-info'];
-
-    mapBtn.onclick = function (e) {
+    var btn_html = '<input id="map-btn" value="🌍 Carte" type="submit" class="button-blue full" style="background-color: #666;min-height: initial;line-height: 13px;width: auto;padding: 0px 21px;float: right;margin-left: 18px;">';
+    container.insertAdjacentHTML('afterbegin', btn_html);
+    var btn = container.querySelector('#map-btn');
+    
+    btn.onclick = function (e) {
         e.preventDefault();
         var url = 'https://lbc.dam.io/?url=' + encodeURIComponent(window.location.href);
         window.open(url, '_blank');
-        return false;
     }
 }
