@@ -63,9 +63,10 @@ def fetch_items(url, page):
         if item.select('.item_supp'):
             data['category'] = item.select('.item_supp')[0].text \
                                     .replace('(pro)', '').strip()
-            place = item.select('.item_supp')[1].text
-            place = ' '.join(x.strip() for x in place.strip().split(' ') if x.strip())
-            data['place'] = place
+            if len(item.select('.item_supp')) > 1:
+                place = item.select('.item_supp')[1].text
+                place = ' '.join(x.strip() for x in place.strip().split(' ') if x.strip())
+                data['place'] = place
         price = item.find(class_='item_price')
         if price:
             data['price'] = price.text.replace('\xa0', ' ').strip()
