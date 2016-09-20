@@ -6,3 +6,4 @@ requests
 gunicorn
 gevent
 lxml
+furl

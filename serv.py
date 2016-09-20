@@ -1,5 +1,6 @@
 import requests, json, os, functools
 from bs4 import BeautifulSoup
+from furl import furl
 
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
@@ -38,7 +39,7 @@ def geolocate(place):
 @cache.memoize(1000)
 def fetch_items(url, page):
     assert url.startswith('https://www.leboncoin.fr/')
-    url_with_page = url + '&o=' + str(page)
+    url_with_page = furl(url).add({'o': str(page)})
     print('fetch items', url_with_page)
 
     items = []
@@ -46,7 +47,7 @@ def fetch_items(url, page):
     soup = BeautifulSoup(resp.text, 'lxml')
 
     if soup.find(id='last') and 'href' in soup.find(id='last').attrs:
-        pages = int(soup.find(id='last').attrs['href'].split('o=')[-1].split('&')[0])
+        pages = int(furl(soup.find(id='last').attrs['href']).args['o'])
     else:
         pages = page
     pages = min(pages, MAX_PAGES)
