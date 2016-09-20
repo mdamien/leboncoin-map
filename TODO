@@ -13,4 +13,5 @@ fix "carte" button placement
 add sentry
 // pages requests
 fast load of first items by loading the currently visible items when clicking the "see on map" button
-favicon
+vendor js libs
+progressive geocoding meessage

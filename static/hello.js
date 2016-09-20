@@ -48,7 +48,7 @@ function add_to_map(data) {
             coords.lng,
           ], {
             icon: new L.DivIcon({
-              className: 'ad-icon',
+              className: 'dat-ad-icon',
               html: '<h2>' + a.title + (a.price ? (' - ' + a.price) : '') + '</h2>'
             })
           });
