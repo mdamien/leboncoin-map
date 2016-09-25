@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>Carte - blablacar.fr</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; background: #333;
+    color: #eee; font-family: sans-serif;}
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+  .dat-ad-icon h2 {
+    position: absolute;
+    top: 0;
+    background: rgba(255, 255, 255, 0.74);
+    color: black;
+    padding: 1px 7px;
+    min-width: 99px;
+    border-radius: 0 10px 10px 10px;
+    font-size: 9px;
+    line-height: 13px;
+    border: 1px solid black;
+  }
+  #msg {
+    position: absolute;
+    background: #333;
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.5.0/leaflet.markercluster.js" integrity="sha256-QEHbaHVrpoDLtaWpb/r+blD/KLesxm06dLHcC0co03g=" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.5.0/MarkerCluster.css" integrity="sha256-+bdWuWOXMFkX0v9Cvr3OWClPiYefDQz9GGZP/7xZxdc=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.5.0/MarkerCluster.Default.css" integrity="sha256-LWhzWaQGZRsWFrrJxg+6Zn8TT84k0/trtiHBc6qcGpY=" crossorigin="anonymous" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<div id='map'></div>
+
+<center id='msg'><br/><h1>Carte - blablacar.fr</h1></center>
+
+<script src='/main_blabla.js'></script>
+</body>
+</html>
